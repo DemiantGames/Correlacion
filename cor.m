@@ -196,16 +196,16 @@ pAB=(pAB/P100A)*100
 %pA2B=(pA2B/P100A2)*100
 pA3B=(pA3B/P100A3)*100
 pA4B=(pA4B/P100A4)*100
-%promA=(pAB+pA2B+pA3B+pA4B)/4
+promA=(pAB+pA2B+pA3B+pA4B)/4
 
-promA=max([pAB pA2B pA3B pA4B])
+%promA=max([pAB pA2B pA3B pA4B])
 
 pMB=(pMB/P100M)*100
 pM2B=(pM2B/P100M2)*100
 pM3B=(pM3B/P100M3)*100
 pM4B=(pM4B/P100M4)*100
-%promM=(pMB+pM2B+pM3B+pM4B)/4
-promM=max([pMB pM2B pM3B pM4B])
+promM=(pMB+pM2B+pM3B+pM4B)/4
+%promM=max([pMB pM2B pM3B pM4B])
 if promM>=17 || promA>=30
     if promM>promA
     axes(handles.axes1)
