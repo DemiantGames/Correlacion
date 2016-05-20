@@ -3,12 +3,12 @@ recorder = audiorecorder(Fs,16,1);
 disp('Start speaking.');
 recordblocking(recorder, 1.5);
 disp('End of recording');
-A4=getaudiodata(recorder);
-sound(A2,Fs)
+M4=getaudiodata(recorder);
+sound(M4,Fs)
 
 plot(A2)
    
-    M=M/abs(max(M));
+    M4=M4/abs(max(M4));
  A=A/abs(max(A));
     A2=A2/abs(max(A2));
     M2=M2/abs(max(M2));
