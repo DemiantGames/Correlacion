@@ -60,9 +60,9 @@ guidata(hObject, handles);
 
 % UIWAIT makes cor wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-global c A M
-c=0;
+global A A2 A3 A4 M
 load('AM.mat','A','M');
+load('A.mat','A2','A3','A4');
 
 % --- Outputs from this function are returned to the command line.
 function varargout = cor_OutputFcn(hObject, eventdata, handles) 
@@ -80,7 +80,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global A M
+global A A2 A3 A4 M
 
 Fs=8000;
 recorder = audiorecorder(Fs,16,1);
@@ -118,25 +118,66 @@ B=B/abs(max(B));
 % pncMB=(mMB/mM)*100
 
 maxlagsA = numel(A)*0.5;
+maxlagsA2 = numel(A2)*0.5;
+maxlagsA3 = numel(A3)*0.5;
+maxlagsA4 = numel(A4)*0.5;
+
 maxlagsM = numel(M)*0.5;
+
 [corrA,lagA]=xcorr(A,A,maxlagsA);
+[corrA2,lagA2]=xcorr(A2,A2,maxlagsA2);
+[corrA3,lagA3]=xcorr(A3,A3,maxlagsA3);
+[corrA4,lagA4]=xcorr(A4,A4,maxlagsA4);
+
+
 [corrM,lagM]=xcorr(M,M,maxlagsM);
+
+
 [corrAB,lagAB]=xcorr(A,B,maxlagsA);
+[corrA2B,lagA2B]=xcorr(A2,B,maxlagsA2);
+[corrA3B,lagA3B]=xcorr(A3,B,maxlagsA3);
+[corrA4B,lagA4B]=xcorr(A4,B,maxlagsA4);
+
 [corrMB,lagMB]=xcorr(M,B,maxlagsM);
 
 [~,dfA] = findpeaks(corrA,'MinPeakDistance',5*2*24*10);
+[~,dfA2] = findpeaks(corrA2,'MinPeakDistance',5*2*24*10);
+[~,dfA3] = findpeaks(corrA3,'MinPeakDistance',5*2*24*10);
+[~,dfA4] = findpeaks(corrA4,'MinPeakDistance',5*2*24*10);
+
 [~,dfM] = findpeaks(corrM,'MinPeakDistance',5*2*24*10);
+
 [~,dfAB] = findpeaks(corrAB,'MinPeakDistance',5*2*24*10);
+[~,dfA2B] = findpeaks(corrA2B,'MinPeakDistance',5*2*24*10);
+[~,dfA3B] = findpeaks(corrA3B,'MinPeakDistance',5*2*24*10);
+[~,dfA4B] = findpeaks(corrA4B,'MinPeakDistance',5*2*24*10);
+
 [~,dfMB] = findpeaks(corrMB,'MinPeakDistance',5*2*24*10);
 
 P100A=corrA(dfA(3))-corrA(dfA(4));
+P100A2=corrA2(dfA2(3))-corrA2(dfA2(4));
+P100A3=corrA3(dfA3(2))-corrA3(dfA3(3));
+P100A4=corrA4(dfA4(3))-corrA4(dfA4(4));
+
 P100M=corrM(dfM(3))-corrM(dfM(4));
-pAB=abs(corrAB(dfAB(3))-corrAB(dfAB(4)))
-pMB=abs(corrMB(dfMB(3))-corrMB(dfMB(4)))
+pAB=abs(corrAB(dfAB(3))-corrAB(dfAB(4)));
+pA2B=abs(corrA2B(dfA2B(3))-corrA2B(dfA2B(4)));
+pA3B=abs(corrA3B(dfA3B(3))-corrA3B(dfA3B(4)));
+pA4B=abs(corrA4B(dfA4B(3))-corrA4B(dfA4B(4)));
+
+pMB=abs(corrMB(dfMB(3))-corrMB(dfMB(4)));
+
 pAB=(pAB/P100A)*100
+pA2B=(pA2B/P100A2)*100
+pA3B=(pA3B/P100A3)*100
+pA4B=(pA4B/P100A4)*100
+promA=(pAB+pA2B+pA3B+pA4B)/4
+%pABmax=max([pAB pA2B pA3B pA4B])
+
 pMB=(pMB/P100M)*100
-if pMB>=15 || pAB>=15
-    if pMB>pAB
+
+if pMB>=15 || promA>=30
+    if pMB>promA
     axes(handles.axes1)
     matlabImage = imread('elcapo.jpg');
     image(matlabImage)

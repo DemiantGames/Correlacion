@@ -3,7 +3,7 @@ recorder = audiorecorder(Fs,16,1);
 disp('Start speaking.');
 recordblocking(recorder, 1.5);
 disp('End of recording');
-A2=getaudiodata(recorder);
+A4=getaudiodata(recorder);
 sound(A2,Fs)
 
 plot(A2)
